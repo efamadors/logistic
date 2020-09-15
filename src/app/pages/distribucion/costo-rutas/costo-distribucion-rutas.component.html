@@ -1,0 +1,66 @@
+
+            <div class="row">
+              <button (click)="agregar()" type="submit" class="btn btn-primary btn-round">Agregar</button>
+              <div class="table-responsive">
+                  <table class="table">
+                    <thead class=" text-primary">
+                      <th>
+                        Origen
+                      </th>
+                      <th>
+                        Destino
+                      </th>
+                      <th>
+                        Distancia Km
+                      </th>
+                      <th class="text-right">
+                        Cantidad Viajes
+                      </th>
+                      <th class="text-right">
+                          Recorrido
+                      </th>
+                      <th>
+                          Acciones
+                      </th>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let ruta of rutas | async">
+                        <td>
+                          {{ruta.origen}}
+                        </td>
+                        <td>
+                          {{ruta.destino}}
+                        </td>
+                        <td class="text-right">
+                          {{ruta.distancia}}
+                        </td>
+                        <td class="text-right">
+                          {{ruta.cantidadViajes}}
+                        </td>
+                        <td class="text-right">
+                          {{ruta.recorrido}}
+                        </td>
+                        <td>
+                            <button (click)="edit(ruta)" class="btn btn-success btn-round">Editar</button>
+                            <button class="btn btn-danger btn-round">Eliminar</button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+              </div>  
+            </div>
+    
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Total de Kms</label>
+                  <input type="text" class="form-control" placeholder="Tipo de mercaderia" name="tipoMercaderia" [(ngModel)]="totalKm">
+                </div>
+              </div>
+              <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Km / Equipo</label>
+                    <input type="number" class="form-control" placeholder="Cantidad de carga a transportar" name="cantidadTransportar" [(ngModel)]="kmPorEquipo">
+                  </div>
+              </div>
+            </div>

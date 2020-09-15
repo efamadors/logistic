@@ -1,0 +1,94 @@
+<div class="row">
+    <div class="col-md-3">
+      <div class="form-group">
+        <label for="exampleInputEmail1">Nombre Liquido Transportar</label>
+        <input type="text" class="form-control" placeholder="Nombre del liquido a transportar" name="nombreLiquido" [(ngModel)]="cubicajeRecipiente.nombreLiquido">
+      </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="form-group">
+          <label for="exampleInputEmail1">Densidad del Liquido</label>
+          <input type="number" class="form-control" placeholder="Densidad del liquido" name="densidadLiquido" [(ngModel)]="cubicajeRecipiente.densidadLiquido">
+        </div>
+      </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label>Cantidad a Transportar Gal</label>
+        <input type="number" class="form-control" placeholder="Cantidad de galones a transportar" name="cantidadTransportar" [(ngModel)]="cubicajeRecipiente.cantidadTransportar">
+      </div>
+    </div>
+    <div class="col-md-6 form-row">
+      <div class="form-group col-md-6">
+        <label>Tipo de Vehiculo de Carga Terrestre:</label>
+        <select class="form-control" id="inputGroupSelect02" (change)="tipoVehiculoCargaTerrestreChange($event)">
+          <option selected>Seleccione un tipo...</option>
+          <option *ngFor="let tipo of tiposVehiculoCargaTerrestres" 
+          [value]="tipo.tipo">{{tipo.tipo}}</option>
+        </select>
+      </div>
+      <div class="form-group col-md-6">
+          <label>Capacidad del Recipiente:</label>
+          <input [readonly]="cubicajeRecipiente.tipoVehiculoCargaTerrestre.peso > 0" type="number" class="form-control" placeholder="Capacidad del recipiente" [(ngModel)]="cubicajeRecipiente.tipoVehiculoCargaTerrestre.peso">
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4">
+      <div class="form-group">
+        <label>Largo del Contenedor</label>
+        <input type="text" class="form-control" placeholder="Ingrese el largo del contenedor" name="largoContenedor" [(ngModel)]="cubicajeRecipiente.largoContenedor">
+      </div>
+    </div>
+    <div class="col-md-8 form-row">
+      <div class="form-group col-md-3">
+        <label>Largo Caja en Pies</label>
+        <input type="number" class="form-control" placeholder="Ingrese el largo de la caje en pies" name="largo" [(ngModel)]="cubicajeRecipiente.dimensionRecipiente.largo">
+      </div>
+      <div class="form-group col-md-3">
+          <label>Ancho Caja en Pies:</label>
+          <input type="number" class="form-control" placeholder="Ingrese el ancho de la caje en pies" name="ancho" [(ngModel)]="cubicajeRecipiente.dimensionRecipiente.ancho">
+      </div>
+      <div class="form-group col-md-3">
+          <label>Alto de Caja en Pies:</label>
+          <input type="number" class="form-control" placeholder="Ingrese el alto de la caje en pies" name="alto" [(ngModel)]="cubicajeRecipiente.dimensionRecipiente.alto">
+      </div>
+      <div class="form-group col-md-3">
+          <label>Peso de Caja Kg:</label>
+          <input type="number" class="form-control" placeholder="Ingrese el peso de la caje en pies" name="peso" [(ngModel)]="cubicajeRecipiente.dimensionRecipiente.capacidad">
+      </div>
+    </div>
+  </div>
+
+  <h5 class="card-title">Resultado</h5>
+
+  <div class="row">
+    <div class="col-md-4">
+      <div class="form-group">
+        <label>Cantidad de Recipiente / Contenedor</label>
+        <input type="number" class="form-control" disabled [value]="cubicajeResult.cantidadPorContenedor">
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label>Cantidad Galones / Contenedor</label>
+        <input type="number" class="form-control" disabled [value]="cubicajeResult.cantidadGalonesPorContenedor">
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label>Cantidad de Contenedores Necesarios</label>
+        <input type="number" class="form-control" disabled [value]="cubicajeResult.cantidadContenedoresNecesarios">
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="update ml-auto mr-auto">
+      <button (click)="calcular()" type="submit" class="btn btn-primary btn-round">Calcular</button>
+    </div>
+  </div>

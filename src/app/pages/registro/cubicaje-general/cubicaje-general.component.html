@@ -1,0 +1,81 @@
+<div class="row">
+    <div class="col-md-3">
+      <div class="form-group">
+        <label for="exampleInputEmail1">Tipo Mercancia Transportar</label>
+        <input type="text" class="form-control" placeholder="Tipo de mercaderia" name="tipoMercaderia" [(ngModel)]="cubicajeGeneral.tipoMercancia">
+      </div>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label>Carga a Transportar Cajas</label>
+        <input type="number" class="form-control" placeholder="Cantidad de carga a transportar" name="cantidadTransportar" [(ngModel)]="cubicajeGeneral.cantidadTransportar">
+      </div>
+    </div>
+    <div class="col-md-6 form-row">
+      <div class="form-group col-md-6">
+        <label>Tipo de Vehiculo de Carga Terrestre:</label>
+        <select class="form-control" id="inputGroupSelect02" (change)="tipoVehiculoCargaTerrestreChange($event)">
+          <option selected>Seleccione un tipo...</option>
+          <option *ngFor="let tipo of tiposVehiculoCargaTerrestres" 
+          [value]="tipo.tipo">{{tipo.tipo}}</option>
+        </select>
+      </div>
+      <div class="form-group col-md-6">
+          <label>Capacidad de Carga:</label>
+          <input [readonly]="cubicajeGeneral.tipoVehiculoCargaTerrestre.peso > 0" type="number" class="form-control" placeholder="Cantidad de carga a transportar" [(ngModel)]="cubicajeGeneral.tipoVehiculoCargaTerrestre.peso">
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4">
+      <div class="form-group">
+        <label>Largo del Contenedor</label>
+        <input type="text" class="form-control" placeholder="Ingrese el largo del contenedor" name="largoContenedor" [(ngModel)]="cubicajeGeneral.largoContenedor">
+      </div>
+    </div>
+    <div class="col-md-8 form-row">
+      <div class="form-group col-md-3">
+        <label>Largo Caja en Pies</label>
+        <input type="number" class="form-control" placeholder="Ingrese el largo de la caje en pies" name="largo" [(ngModel)]="cubicajeGeneral.dimensionCaja.largo">
+      </div>
+      <div class="form-group col-md-3">
+          <label>Ancho Caja en Pies:</label>
+          <input type="number" class="form-control" placeholder="Ingrese el ancho de la caje en pies" name="ancho" [(ngModel)]="cubicajeGeneral.dimensionCaja.ancho">
+      </div>
+      <div class="form-group col-md-3">
+          <label>Alto de Caja en Pies:</label>
+          <input type="number" class="form-control" placeholder="Ingrese el alto de la caje en pies" name="alto" [(ngModel)]="cubicajeGeneral.dimensionCaja.alto">
+      </div>
+      <div class="form-group col-md-3">
+          <label>Peso de Caja Kg:</label>
+          <input type="number" class="form-control" placeholder="Ingrese el peso de la caje en pies" name="peso" [(ngModel)]="cubicajeGeneral.dimensionCaja.capacidad">
+      </div>
+    </div>
+  </div>
+
+  <h5 class="card-title">Resultado</h5>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label>Cantidad de Cajas / Contenedor</label>
+        <input type="number" class="form-control" disabled [value]="cubicajeResult.cantidadPorContenedor">
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label>Cantidad de Contenedores Necesarios</label>
+        <input type="number" class="form-control" disabled [value]="cubicajeResult.cantidadContenedoresNecesarios">
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="update ml-auto mr-auto">
+      <button (click)="calcular()" type="submit" class="btn btn-primary btn-round">Calcular</button>
+    </div>
+  </div>

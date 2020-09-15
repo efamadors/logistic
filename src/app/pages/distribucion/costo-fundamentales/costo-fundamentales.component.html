@@ -1,0 +1,59 @@
+
+<div class="row">
+  <button (click)="agregar()" type="submit" class="btn btn-primary btn-round">Agregar</button>
+  <div class="table-responsive">
+      <table class="table">
+        <thead class=" text-primary">
+          <th>
+            Descripcion
+          </th>
+          <th>
+            Monto`
+          </th>
+          <th>
+              Acciones
+          </th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let ruta of actividades">
+            <td>
+              {{ruta.descripcion}}
+            </td>
+            <td class="text-right">
+              {{ruta.monto}}
+            </td>
+            <td>
+                <button (click)="edit(ruta)" class="btn btn-success btn-round">Editar</button>
+                <button class="btn btn-danger btn-round">Eliminar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+  </div>  
+</div>
+
+<div class="row">
+  <h2>Indicadores</h2>
+  <div class="table-responsive">
+      <table class="table">
+        <thead class=" text-primary">
+          <th>
+            Descripcion
+          </th>
+          <th>
+            Monto
+          </th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let ruta of indicadores">
+            <td>
+              {{ruta.descripcion}}
+            </td>
+            <td class="text-right">
+              {{ruta.monto}}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+  </div>  
+</div>

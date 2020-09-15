@@ -1,0 +1,27 @@
+<div class="modal-header">
+  <h4 class="modal-title">Editar Actividad Fundamental</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label for="exampleInputEmail1">Descripcion Actividad</label>
+          <input type="text" class="form-control" placeholder="Descripcion de la Actividad" name="descripcion" [(ngModel)]="actividad.descripcion">
+        </div>
+      </div>
+  </div>
+  <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label for="exampleInputEmail1">Monto Mensual</label>
+          <input type="number" class="form-control" placeholder="Monto mensual" name="monto" [(ngModel)]="actividad.monto">
+        </div>
+      </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary btn-outline-dark" (click)="activeModal.close(actividad)">Aceptar</button>
+</div>

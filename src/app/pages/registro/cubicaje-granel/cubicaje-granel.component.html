@@ -1,0 +1,63 @@
+<div class="row">
+    <div class="col-md-3">
+      <div class="form-group">
+        <label for="exampleInputEmail1">Nombre Liquido Transportar</label>
+        <input type="text" class="form-control" placeholder="Nombre del liquido a transportar" name="nombreLiquido" [(ngModel)]="cubicajeGranel.nombreLiquido">
+      </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="form-group">
+          <label for="exampleInputEmail1">Densidad del Liquido</label>
+          <input type="number" class="form-control" placeholder="Densidad del liquido" name="densidadLiquido" [(ngModel)]="cubicajeGranel.densidadLiquido">
+        </div>
+      </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label>Cantidad a Transportar Galones</label>
+        <input type="number" class="form-control" placeholder="Cantidad de galones a transportar" name="cantidadTransportar" [(ngModel)]="cubicajeGranel.cantidadTransportar">
+      </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="form-group">
+            <label>Capacidad Cisterna</label>
+            <input type="number" class="form-control" placeholder="Capicidad cisterna" name="capacidadCisterna" [(ngModel)]="cubicajeGranel.capacidadCisterna">
+        </div>
+    </div>
+
+    <div class="col-md-6 form-row">
+      <div class="form-group col-md-6">
+        <label>Tipo de Vehiculo de Carga Terrestre:</label>
+        <select class="form-control" id="inputGroupSelect02" (change)="tipoVehiculoCargaTerrestreChange($event)">
+          <option selected>Seleccione un tipo...</option>
+          <option *ngFor="let tipo of tiposVehiculoCargaTerrestres" 
+          [value]="tipo.tipo">{{tipo.tipo}}</option>
+        </select>
+      </div>
+      <div class="form-group col-md-6">
+          <label>Capacidad de Carga:</label>
+          <input [readonly]="cubicajeGranel.tipoVehiculoCargaTerrestre.peso > 0" type="number" class="form-control" placeholder="Cantidad de carga a transportar" [(ngModel)]="cubicajeGranel.tipoVehiculoCargaTerrestre.peso">
+      </div>
+    </div>
+  </div>
+
+  <h5 class="card-title">Resultado</h5>
+
+  <div class="row">
+    <div class="col-md-4">
+      <div class="form-group">
+        <label>Cantidad de Cisternas</label>
+        <input type="number" class="form-control" disabled [value]="cubicajeResult.cantidadCisternas">
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="update ml-auto mr-auto">
+      <button (click)="calcular()" type="submit" class="btn btn-primary btn-round">Calcular</button>
+    </div>
+  </div>

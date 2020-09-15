@@ -1,0 +1,32 @@
+
+<div class="row">
+  <div class="table-responsive">
+      <table class="table">
+        <thead class=" text-primary">
+          <th>
+            Descripcion
+          </th>
+          <th>
+            Monto`
+          </th>
+          <th>
+              Acciones
+          </th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let ruta of actividades">
+            <td>
+              {{ruta.descripcion}}
+            </td>
+            <td class="text-right">
+              {{ruta.monto}}
+            </td>
+            <td>
+                <button (click)="edit(ruta)" class="btn btn-success btn-round">Editar</button>
+                <button class="btn btn-danger btn-round">Eliminar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+  </div>  
+</div>

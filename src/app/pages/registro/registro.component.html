@@ -1,0 +1,37 @@
+<div class="row">
+    <div class="col-md-12">
+      <div class="card card-user">
+        <div class="card-header">
+          <h5 class="card-title">Registrarse</h5>
+        </div>
+        <div class="card-body">
+          <form>
+            <div class="row">
+              <div class="col-md-5">
+                <div class="form-group">
+                  <label for="inputGroupSelect02">Tipo Cubicaje</label>
+                  <select class="form-control" id="inputGroupSelect02" name="tipoCubicaje" [(ngModel)]="tipoCubicajeSeleccionado">
+                    <option selected>Seleccione un tipo...</option>
+                    <option value="CubicajeGeneral">Cubicaje General</option>
+                    <option value="LiquidoRecipiente">Liquido en Recipientes</option>
+                    <option value="LiquidoGranel">Liquido a Granel</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-md-7">
+                <div class="form-group">
+                  <label>Nombre de la Empresa</label>
+                  <input type="text" class="form-control" placeholder="Nombre de la Empresa" value="">
+                </div>
+              </div>
+            </div>
+            <app-cubicaje-general *ngIf="tipoCubicajeSeleccionado === 'CubicajeGeneral'"></app-cubicaje-general>
+            <app-cubicaje-recipientes *ngIf="tipoCubicajeSeleccionado === 'LiquidoRecipiente'"></app-cubicaje-recipientes>
+            <app-cubicaje-granel *ngIf="tipoCubicajeSeleccionado === 'LiquidoGranel'"></app-cubicaje-granel>
+          </form>
+        </div>
+      </div>
+    </div>
+</div>
+  
