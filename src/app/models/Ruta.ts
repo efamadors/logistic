@@ -1,4 +1,7 @@
+import { Guid } from 'guid-typescript';
+
 export class Ruta {
+    public id: string;
     public origen: string;
     public destino: string;
     public distancia: number;

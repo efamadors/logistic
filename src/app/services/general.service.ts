@@ -6,6 +6,7 @@ import { CubicajeRecipiente } from '../models/CubicajeRecipiente';
 import { CubicajeGranel } from '../models/CubicajeGranel';
 import { Ruta } from '../models/Ruta';
 import { Actividad } from '../models/Actividades';
+import { Guid } from 'guid-typescript';
 
 @Injectable({
   providedIn: 'root'
@@ -64,7 +65,7 @@ export class GeneralService {
     return actividades;
   }
 
-  getActividades(): Actividad[] {
+  getActividadesApoyo(): Actividad[] {
     let actividades = new Array<Actividad>();
     actividades.push(this.crearActividad("Gerente Administrativo"));
     actividades.push(this.crearActividad("Encargado de Almacén"));
@@ -82,6 +83,7 @@ export class GeneralService {
   private crearActividad(descripcion: string) : Actividad{
     const act = new Actividad();
     act.descripcion = descripcion;
+    act.id = Guid.create().toString();
     return act;
   }
 
@@ -89,6 +91,7 @@ export class GeneralService {
     let rutas = new Array<Ruta>();
 
     let ruta1 = new Ruta();
+    ruta1.id = Guid.create().toString();
     ruta1.origen = "San Pedro Sula";
     ruta1.destino = "Tegucigalpa";
     ruta1.distancia = 256;
@@ -96,6 +99,7 @@ export class GeneralService {
     ruta1.recorrido = 0;
     
     let ruta2 = new Ruta();
+    ruta2.id = Guid.create().toString();
     ruta2.origen = "San Pedro Sula";
     ruta2.destino = "San Lorenzo";
     ruta2.distancia = 362;
@@ -103,6 +107,7 @@ export class GeneralService {
     ruta2.recorrido = 0;
 
     let ruta3 = new Ruta();
+    ruta3.id = Guid.create().toString();
     ruta3.origen = "San Pedro Sula";
     ruta3.destino = "Siguatepeque";
     ruta3.distancia = 125;
@@ -110,6 +115,7 @@ export class GeneralService {
     ruta3.recorrido = 0;
 
     let ruta4 = new Ruta();
+    ruta4.id = Guid.create().toString();
     ruta4.origen = "San Pedro Sula";
     ruta4.destino = "Santa Rosa de Copan";
     ruta4.distancia = 156;
@@ -117,6 +123,7 @@ export class GeneralService {
     ruta4.recorrido = 0;
 
     let ruta5 = new Ruta();
+    ruta5.id = Guid.create().toString();
     ruta5.origen = "San Pedro Sula";
     ruta5.destino = "La Ceiba";
     ruta5.distancia = 190;

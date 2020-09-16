@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { Select, Store } from '@ngxs/store';
 import { Actividad } from 'app/models/Actividades';
 import { Ruta } from 'app/models/Ruta';
 import { TipoVehiculoCargaTerrestre } from 'app/models/TipoVehiculoCargaTerrestre';
+import { AddCantidadCargaTransportarAction } from 'app/ngxs/logistic.actions';
+import { LogisticState } from 'app/ngxs/logistic.state';
 import { DatabaseService } from 'app/services/database.service';
 import { GeneralService } from 'app/services/general.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-distribucion-costo',
@@ -19,8 +23,9 @@ export class DistribucionCostoComponent implements OnInit {
   indicadoresApoyo: Actividad[];
   indicadoresFundamentales: Actividad[];
   otrasActividades: Actividad[];
-
-  constructor(private database: DatabaseService) {
+  @Select(LogisticState.getCantidadCargaTransportar) cantidadCargaTransportar$: Observable<number>;
+  
+  constructor(private database: DatabaseService, private store: Store) {
     this.rutas = new Array<Ruta>();
     this.indicadoresFundamentales = new Array<Actividad>();
     this.otrasActividades = new Array<Actividad>();
@@ -29,6 +34,9 @@ export class DistribucionCostoComponent implements OnInit {
 
   ngOnInit() {
     this.rutas = this.database.getRutas();
+    this.cantidadCargaTransportar$.subscribe(cantidadCargaTransportar => {
+      this.cantidadContenedores = cantidadCargaTransportar;
+    })
   }
 
   totalKmChange(totalKm){
@@ -67,5 +75,9 @@ export class DistribucionCostoComponent implements OnInit {
   getIndicadorCombustible(){
     const indicador = this.indicadoresFundamentales.filter(r => r.descripcion = "Indicador de combustible");
     return indicador && indicador.length > 0 ? indicador[0].monto : 0;
+  }
+
+  cantidadCargaTransportarChange(){
+    this.store.dispatch(new AddCantidadCargaTransportarAction(this.cantidadContenedores));
   }
 }

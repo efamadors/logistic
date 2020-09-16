@@ -15,15 +15,15 @@
                       </th>
                     </thead>
                     <tbody>
-                      <tr *ngFor="let ruta of actividades">
+                      <tr *ngFor="let actividad of (actividadApoyoResponse | async).actividadesApoyo">
                         <td>
-                          {{ruta.descripcion}}
+                          {{actividad.descripcion}}
                         </td>
                         <td class="text-right">
-                          {{ruta.monto}}
+                          {{actividad.monto}}
                         </td>
                         <td>
-                            <button (click)="edit(ruta)" class="btn btn-success btn-round">Editar</button>
+                            <button (click)="edit(actividad)" class="btn btn-success btn-round">Editar</button>
                             <button class="btn btn-danger btn-round">Eliminar</button>
                         </td>
                       </tr>

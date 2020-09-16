@@ -24,25 +24,25 @@
                       </th>
                     </thead>
                     <tbody>
-                      <tr *ngFor="let ruta of rutas | async">
+                      <tr *ngFor="let item of (rutasResponse | async).rutas">
                         <td>
-                          {{ruta.origen}}
-                        </td>
-                        <td>
-                          {{ruta.destino}}
-                        </td>
-                        <td class="text-right">
-                          {{ruta.distancia}}
-                        </td>
-                        <td class="text-right">
-                          {{ruta.cantidadViajes}}
-                        </td>
-                        <td class="text-right">
-                          {{ruta.recorrido}}
+                          {{item.origen}}
                         </td>
                         <td>
-                            <button (click)="edit(ruta)" class="btn btn-success btn-round">Editar</button>
-                            <button class="btn btn-danger btn-round">Eliminar</button>
+                          {{item.destino}}
+                        </td>
+                        <td class="text-right">
+                          {{item.distancia}}
+                        </td>
+                        <td class="text-right">
+                          {{item.cantidadViajes}}
+                        </td>
+                        <td class="text-right">
+                          {{item.recorrido}}
+                        </td>
+                        <td>
+                            <button (click)="edit(item)" class="btn btn-success btn-round">Editar</button>
+                            <button (click)="delete(item);" class="btn btn-danger btn-round">Eliminar</button>
                         </td>
                       </tr>
                     </tbody>

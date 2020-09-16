@@ -7,7 +7,8 @@ import { CrearRutaComponent } from './modales/crear-ruta/crear-ruta.component';
 import { DatabaseService } from '../../../services/database.service';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { LogisticState } from '../../../ngxs/logistic.state';
+import { LogisticState, RutasResponse } from '../../../ngxs/logistic.state';
+import { DeleteRutaAction } from 'app/ngxs/logistic.actions';
 
 @Component({
   selector: 'app-costo-distribucion-rutas',
@@ -20,18 +21,18 @@ export class CostoDistribucionRutasComponent implements OnInit {
   @Output() totalKmChange = new EventEmitter<number>();
   @Output() costoKmChange = new EventEmitter<number>();
   @Output() rutasChange = new EventEmitter<Ruta[]>();
-  @Select(LogisticState.getRutas) rutas: Observable<Ruta[]>;
- 
+  @Select(LogisticState.getRutas) rutasResponse: Observable<RutasResponse>;
+
   kmPorEquipo: number;
   totalKm: number;
-  
-  constructor(private generalServicio: GeneralService, private database: DatabaseService, private modalService: NgbModal) {
+
+  constructor(private generalServicio: GeneralService, private modalService: NgbModal, private store: Store) {
    }
 
   ngOnInit(): void {
-    this.rutas.subscribe(rutas => {
-      this.totalKm = this.generalServicio.getTotalKm(rutas);
-      if (this.cantidadContenedores > 0) this.kmPorEquipo = this.totalKm / this.cantidadContenedores;
+    this.rutasResponse.subscribe(rutasMant => {
+      this.totalKm = rutasMant.totalKm;
+      if (this.cantidadContenedores > 0) this.kmPorEquipo = rutasMant.totalKm / this.cantidadContenedores;
     })
   }
 
@@ -42,6 +43,7 @@ export class CostoDistribucionRutasComponent implements OnInit {
     rutanew.destino = ruta.destino;
     rutanew.distancia = ruta.distancia;
     rutanew.cantidadViajes = ruta.cantidadViajes;
+    rutanew.id = ruta.id;
     rutanew.recorrido = ruta.recorrido;
 
     modalRef.componentInstance.ruta = rutanew;
@@ -59,5 +61,9 @@ export class CostoDistribucionRutasComponent implements OnInit {
 
   calcularKm(){
     
+  }
+
+  delete(ruta: Ruta){
+    this.store.dispatch(new DeleteRutaAction(ruta));
   }
 }

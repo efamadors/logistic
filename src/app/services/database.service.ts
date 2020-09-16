@@ -9,11 +9,15 @@ export class DatabaseService {
 
   constructor() { }
 
+  saveCantidadCargaTransportar(cantidadCargaTransportar: number){
+    localStorage.setItem('cantidadCargaTransportar', cantidadCargaTransportar.toString());
+  }
+
   saveRutas(rutas: Ruta[]) {
     localStorage.setItem('rutas', JSON.stringify(rutas));
   }
 
-  saveActividadesApayo(actividades: Actividad[]) {
+  saveActividadesApoyo(actividades: Actividad[]) {
     localStorage.setItem('actividadesApoyo', JSON.stringify(actividades));
   }
 
@@ -23,6 +27,11 @@ export class DatabaseService {
 
   saveIndicadoresFundamentales(actividades: Actividad[]) {
     localStorage.setItem('indicadoresFundamentales', JSON.stringify(actividades));
+  }
+
+  getCantidadCargaTransportar() : number{
+    const cantidadCargaTransportar = localStorage.getItem('cantidadCargaTransportar');
+    return Number(cantidadCargaTransportar ? cantidadCargaTransportar : 0);
   }
 
   getRutas(): Ruta[] {
@@ -38,7 +47,7 @@ export class DatabaseService {
     }) : [];
   }
 
-  getActividadesApayo(): Actividad[] {
+  getActividadesApoyo(): Actividad[] {
     const rutasString = localStorage.getItem('actividadesApoyo');
     return JSON.parse(rutasString);
   }

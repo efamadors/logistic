@@ -1,7 +1,10 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Select, Store } from '@ngxs/store';
+import { ActividadApoyoResponse, LogisticState } from 'app/ngxs/logistic.state';
 import { DatabaseService } from 'app/services/database.service';
 import { GeneralService } from 'app/services/general.service';
+import { Observable } from 'rxjs';
 import { Actividad } from '../../../models/Actividades';
 import { CrearActividadComponent } from './crear-actividad/crear-actividad.component';
 import { EditarActividadComponent } from './editar-actividad/editar-actividad.component';
@@ -13,25 +16,27 @@ import { EditarActividadComponent } from './editar-actividad/editar-actividad.co
 })
 export class CostoActividadesComponent implements OnInit {
   @Input() nombreEmpresa: string;
-  @Input() totalKm: number;
-   
+  
   totalCosteApoyo: number;
   costoKm: number;
-  actividades: Actividad[];
+  @Select(LogisticState.getActividadesApoyo) actividadApoyoResponse: Observable<ActividadApoyoResponse>;
 
-  constructor(private generalServicio: GeneralService, private database: DatabaseService, private modalService: NgbModal) { }
+  constructor(private generalServicio: GeneralService, private database: DatabaseService, private modalService: NgbModal, private store: Store) { }
 
   ngOnInit(): void {
-    let actividades = this.database.getActividadesApayo();
-    if (!actividades || actividades.length == 0){
-      actividades = this.generalServicio.getActividades();
-    }
-    this.actividades = actividades;
+    this.actividadApoyoResponse.subscribe(actividadApoyoResponse => {
+      this.totalCosteApoyo = actividadApoyoResponse.totalCosteApoyo;
+      this.costoKm = actividadApoyoResponse.costoxKm;    
+    });
   }
 
   edit(actividad: Actividad) {
     const modalRef = this.modalService.open(EditarActividadComponent);
-    modalRef.componentInstance.actividad = actividad;
+    const newActividad = new Actividad();
+    newActividad.descripcion = actividad.descripcion;
+    newActividad.id = actividad.id;
+    newActividad.monto = actividad.monto;
+    modalRef.componentInstance.actividad = newActividad;
     modalRef.result.then(()=>this.calcularCosto());
   }
 
@@ -39,16 +44,14 @@ export class CostoActividadesComponent implements OnInit {
     const modalRef = this.modalService.open(CrearActividadComponent);
     modalRef.result.then((res)=>{
       if (res){
-        this.actividades.push(res);
-        this.calcularCosto();
+        // this.actividades.push(res);
+        // this.calcularCosto();
       }
     })
   }
 
   calcularCosto() {
-    this.totalCosteApoyo = this.generalServicio.getTotalCostoApoyo(this.actividades);  
-    if (this.totalKm > 0) this.costoKm = this.totalCosteApoyo / this.totalKm;
-    this.database.saveActividadesApayo(this.actividades);
+   
   }
 
   calcular() {

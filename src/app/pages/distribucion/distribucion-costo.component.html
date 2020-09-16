@@ -15,7 +15,7 @@
           <div class="col-md-6">
               <div class="form-group">
                 <label>Cantidad de Contenedores</label>
-                <input type="number" class="form-control" placeholder="Cantidad de carga a transportar" name="cantidadTransportar" [(ngModel)]="cantidadContenedores">
+                <input type="number" class="form-control" placeholder="Cantidad de carga a transportar" name="cantidadTransportar" [(ngModel)]="cantidadContenedores" (keyup)="cantidadCargaTransportarChange()">
               </div>
           </div>
         </div>
@@ -39,7 +39,7 @@
             <app-costo-distribucion-rutas (rutasChange)="rutasChange($event)" [cantidadContenedores]="cantidadContenedores" (totalKmChange)="totalKmChange($event)" (costoKmChange)="costoKmChange($event)"></app-costo-distribucion-rutas>
           </div>
           <div role="tabpanel" class="tab-pane" id="actividades" style="margin: 20px;">
-            <app-costo-actividades [(totalKm)]="totalKm"></app-costo-actividades>
+            <app-costo-actividades></app-costo-actividades>
           </div>
           <div role="tabpanel" class="tab-pane" id="fundamentales" style="margin: 20px;">
             <app-costo-fundamentales (indicadoresFundamentalesChange)="indicadoresFundamentalesChange($event)" [costoKm]="costoKm"></app-costo-fundamentales>
