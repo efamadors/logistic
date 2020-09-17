@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { AddActividadApoyoAction, AddActividadesApoyoAction, AddCantidadCargaTransportarAction, AddRutasAction } from './ngxs/logistic.actions';
+import { AddActividadApoyoAction, AddActividadesApoyoAction, AddActividadesFundamentalesAction, AddCantidadCargaTransportarAction, AddOtrasActividadesAction, AddRutasAction } from './ngxs/logistic.actions';
 import { DatabaseService } from './services/database.service';
 import { GeneralService } from './services/general.service';
 
@@ -16,6 +16,8 @@ export class AppComponent{
     this.getCantidadCargaTransportar();
     this.getRutas();
     this.getActividadesApoyo();
+    this.getActividadesFundamentales();
+    this.getOtrasActividades();
   }
 
   private getCantidadCargaTransportar() {
@@ -37,5 +39,21 @@ export class AppComponent{
       actividades = this.generalService.getActividadesApoyo();
     }
     this.store.dispatch(new AddActividadesApoyoAction(actividades));
+  }
+
+  private getActividadesFundamentales() {
+    let actividades = this.databaseService.getActividadesFundamentales();
+    if (!actividades || actividades.length == 0) {
+      actividades = this.generalService.getActividadesFundamentales();
+    }
+    this.store.dispatch(new AddActividadesFundamentalesAction(actividades));
+  }
+
+  private getOtrasActividades() {
+    let actividades = this.databaseService.getOtrasActividades();
+    if (!actividades || actividades.length == 0) {
+      actividades = this.generalService.getOtrasActividades();
+    }
+    this.store.dispatch(new AddOtrasActividadesAction(actividades));
   }
 }

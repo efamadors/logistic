@@ -3,7 +3,7 @@ import { Select, Store } from '@ngxs/store';
 import { Actividad } from 'app/models/Actividades';
 import { Ruta } from 'app/models/Ruta';
 import { TipoVehiculoCargaTerrestre } from 'app/models/TipoVehiculoCargaTerrestre';
-import { AddCantidadCargaTransportarAction } from 'app/ngxs/logistic.actions';
+import { AddCantidadCargaTransportarAction, CalcularActividadesResumenAction } from 'app/ngxs/logistic.actions';
 import { LogisticState } from 'app/ngxs/logistic.state';
 import { DatabaseService } from 'app/services/database.service';
 import { GeneralService } from 'app/services/general.service';
@@ -65,11 +65,12 @@ export class DistribucionCostoComponent implements OnInit {
   }
 
   calcular(){
-    console.log(this.rutas, this.indicadoresFundamentales, this.otrasActividades);
-    this.rutas.forEach(ruta => {
-      const distancia = ruta.distancia;
-      const indicadorCombustible = this.getIndicadorCombustible();
-    })
+    // console.log(this.rutas, this.indicadoresFundamentales, this.otrasActividades);
+    // this.rutas.forEach(ruta => {
+    //   const distancia = ruta.distancia;
+    //   const indicadorCombustible = this.getIndicadorCombustible();
+    // })
+    this.store.dispatch(new CalcularActividadesResumenAction(true));
   }
 
   getIndicadorCombustible(){

@@ -2,20 +2,20 @@ import { Action, Selector, State, StateContext } from "@ngxs/store";
 import { DatabaseService } from '../services/database.service';
 import { Guid } from 'guid-typescript';
 import { Ruta } from '../models/Ruta';
-import { AddActividadApoyoAction, AddActividadesApoyoAction, AddCantidadCargaTransportarAction, AddRutaAction, AddRutasAction, DeleteRutaAction, UpdateActividadApoyoAction, UpdateRutaAction } from './logistic.actions';
+import { AddActividadApoyoAction, AddActividadesApoyoAction, AddActividadesFundamentalesAction, AddCantidadCargaTransportarAction, AddOtrasActividadesAction, AddRutaAction, AddRutasAction, CalcularActividadesResumenAction, DeleteRutaAction, UpdateActividadApoyoAction, UpdateActividadesFundamentalesAction, UpdateOtraActividadAction, UpdateRutaAction } from './logistic.actions';
 import { Injectable } from '@angular/core';
 import { Actividad } from '../models/Actividades';
 import { GeneralService } from 'app/services/general.service';
+import { ActividadResumen } from 'app/models/ActividadResumen';
 
-export class LogisticStateModel {
-  cantidadCargaTransportar: number;
-  rutasMant: RutasResponse;
-  actividadesMant: ActividadApoyoResponse;
+export class ActividadesResumenResponse {
+  calculoActividadesRuta: Ruta[];
 }
 
 export class RutasResponse {
   rutas: Ruta[];
   totalKm: number;
+  kmPorEquipo: number;
 }
 
 export class ActividadApoyoResponse {
@@ -24,12 +24,33 @@ export class ActividadApoyoResponse {
   costoxKm: number;
 }
 
+export class OtrasActividadesResponse {
+  otrasActividades: Actividad[];
+}
+
+export class ActividadFundamentalResponse {
+  actividadesFundamentales: Actividad[];
+  indicadores: Actividad[];
+}
+
+export class LogisticStateModel {
+  cantidadCargaTransportar: number;
+  rutasMant: RutasResponse;
+  actividadesMant: ActividadApoyoResponse;
+  actividadesFundamentalesMant: ActividadFundamentalResponse;
+  otrasActividadesMant: OtrasActividadesResponse;
+  actividadesResumenMant: ActividadesResumenResponse;
+}
+
 @State<LogisticStateModel>({
   name: 'logistic',
   defaults: {
     cantidadCargaTransportar: 0,
     rutasMant: new RutasResponse(),
-    actividadesMant: new ActividadApoyoResponse()
+    actividadesMant: new ActividadApoyoResponse(),
+    actividadesFundamentalesMant: new ActividadFundamentalResponse(),
+    otrasActividadesMant: new OtrasActividadesResponse(),
+    actividadesResumenMant: new ActividadesResumenResponse()
   }
 })
 @Injectable()
@@ -47,6 +68,12 @@ export class LogisticState {
   @Selector()
   static getActividadesApoyo(state: LogisticStateModel) { return state.actividadesMant; }
 
+  @Selector()
+  static getActividadesFundamentales(state: LogisticStateModel) { return state.actividadesFundamentalesMant; }
+
+  @Selector()
+  static getOtrasActividades(state: LogisticStateModel) { return state.otrasActividadesMant; }
+
   @Action(AddCantidadCargaTransportarAction)
   addCantidadCargaTransportar({ getState, setState }: StateContext<LogisticStateModel>, { payload }: AddCantidadCargaTransportarAction) {
     return new Promise((resolve) => {
@@ -55,12 +82,11 @@ export class LogisticState {
 
       setState({
         ...previousState,
-        cantidadCargaTransportar:payload
+        cantidadCargaTransportar: payload
       });
       resolve();
     })
   }
-
 
   @Action(AddRutasAction)
   addRutas({ getState, setState }: StateContext<LogisticStateModel>, { payload }: AddRutasAction) {
@@ -68,12 +94,49 @@ export class LogisticState {
       const previousState = getState();
       this.database.saveRutas(payload);
       const totalKm = this.generalServicio.getTotalKm(payload);
+      const kmPorEquipo = totalKm / previousState.cantidadCargaTransportar;
 
       setState({
         ...previousState,
         rutasMant: {
           rutas: payload,
-          totalKm: totalKm
+          totalKm: totalKm,
+          kmPorEquipo: kmPorEquipo
+        }
+      });
+      resolve();
+    })
+  }
+
+  @Action(AddOtrasActividadesAction)
+  addOtrasActividades({ getState, setState }: StateContext<LogisticStateModel>, { payload }: AddOtrasActividadesAction) {
+    return new Promise((resolve) => {
+      const previousState = getState();
+      this.database.saveOtrasActividades(payload);
+
+      setState({
+        ...previousState,
+        otrasActividadesMant: {
+          otrasActividades: payload
+        }
+      });
+      resolve();
+    })
+  }
+
+  @Action(AddActividadesFundamentalesAction)
+  addActividadesFundamentales({ getState, setState }: StateContext<LogisticStateModel>, { payload }: AddActividadesFundamentalesAction) {
+    return new Promise((resolve) => {
+      const previousState = getState();
+      this.database.saveActividadesFundamentales(payload);
+
+      const indicadores = this.calcularIndicadoresActividadesFundamentales(payload, previousState.rutasMant.kmPorEquipo);
+
+      setState({
+        ...previousState,
+        actividadesFundamentalesMant: {
+          actividadesFundamentales: payload,
+          indicadores: indicadores
         }
       });
       resolve();
@@ -90,12 +153,14 @@ export class LogisticState {
 
       this.database.saveRutas(rutas);
       const totalKm = this.generalServicio.getTotalKm(rutas);
+      const kmPorEquipo = totalKm / previousState.cantidadCargaTransportar;
 
       setState({
         ...previousState,
         rutasMant: {
           rutas: rutas,
-          totalKm: totalKm
+          totalKm: totalKm,
+          kmPorEquipo: kmPorEquipo
         }
       });
       resolve();
@@ -112,11 +177,55 @@ export class LogisticState {
       const totalKm = this.generalServicio.getTotalKm(rutas);
       this.database.saveRutas(rutas);
 
+      const kmPorEquipo = totalKm / previousState.cantidadCargaTransportar;
+
       setState({
         ...previousState,
         rutasMant: {
           rutas: rutas,
-          totalKm: totalKm
+          totalKm: totalKm,
+          kmPorEquipo: kmPorEquipo
+        }
+      });
+      resolve();
+    })
+  }
+
+  @Action(UpdateOtraActividadAction)
+  updateOtraActiviadad({ getState, setState }: StateContext<LogisticStateModel>, { payload }: UpdateOtraActividadAction) {
+    return new Promise((resolve) => {
+      const previousState = getState();
+      const actividades = [...previousState.otrasActividadesMant.otrasActividades];
+      const actividadesIndex = actividades.findIndex(r => r.id == payload.id);
+      actividades[actividadesIndex] = payload;
+      this.database.saveOtrasActividades(actividades);
+
+      setState({
+        ...previousState,
+        otrasActividadesMant: {
+          otrasActividades: actividades
+        }
+      });
+      resolve();
+    })
+  }
+
+  @Action(UpdateActividadesFundamentalesAction)
+  updateActividadFundamental({ getState, setState }: StateContext<LogisticStateModel>, { payload }: UpdateActividadesFundamentalesAction) {
+    return new Promise((resolve) => {
+      const previousState = getState();
+      const actividades = [...previousState.actividadesFundamentalesMant.actividadesFundamentales];
+      const actividadIndex = actividades.findIndex(r => r.id == payload.id);
+      actividades[actividadIndex] = payload;
+      this.database.saveActividadesFundamentales(actividades);
+
+      const indicadores = this.calcularIndicadoresActividadesFundamentales(actividades, previousState.rutasMant.totalKm);
+
+      setState({
+        ...previousState,
+        actividadesFundamentalesMant: {
+          actividadesFundamentales: actividades,
+          indicadores: indicadores
         }
       });
       resolve();
@@ -131,12 +240,14 @@ export class LogisticState {
       const rutasFilter = rutas.filter(r => r.id != payload.id);
       this.database.saveRutas(rutasFilter);
       const totalKm = this.generalServicio.getTotalKm(rutas);
+      const kmPorEquipo = totalKm / previousState.cantidadCargaTransportar;
 
       setState({
         ...previousState,
         rutasMant: {
           rutas: rutasFilter,
-          totalKm: totalKm
+          totalKm: totalKm,
+          kmPorEquipo: kmPorEquipo
         }
       });
       resolve();
@@ -147,10 +258,10 @@ export class LogisticState {
   addActividadesApoyo({ getState, setState }: StateContext<LogisticStateModel>, { payload }: AddActividadesApoyoAction) {
     return new Promise((resolve) => {
       const previousState = getState();
-      
+
       this.database.saveActividadesApoyo(payload);
 
-      const totalCosteApoyo = this.generalServicio.getTotalCostoApoyo(payload);  
+      const totalCosteApoyo = this.generalServicio.getTotalCostoApoyo(payload);
       const totalKm = previousState.rutasMant.totalKm;
 
       let costoxKm;
@@ -162,7 +273,7 @@ export class LogisticState {
           actividadesApoyo: payload,
           costoxKm: costoxKm,
           totalCosteApoyo: totalCosteApoyo
-        } 
+        }
       });
       resolve();
     })
@@ -178,7 +289,7 @@ export class LogisticState {
 
       this.database.saveActividadesApoyo(actividades);
 
-      const totalCosteApoyo = this.generalServicio.getTotalCostoApoyo(actividades);  
+      const totalCosteApoyo = this.generalServicio.getTotalCostoApoyo(actividades);
       const totalKm = previousState.rutasMant.totalKm;
 
       let costoxKm;
@@ -206,7 +317,7 @@ export class LogisticState {
 
       this.database.saveActividadesApoyo(actividades);
 
-      const totalCosteApoyo = this.generalServicio.getTotalCostoApoyo(actividades);  
+      const totalCosteApoyo = this.generalServicio.getTotalCostoApoyo(actividades);
       const totalKm = previousState.rutasMant.totalKm;
 
       let costoxKm;
@@ -222,5 +333,42 @@ export class LogisticState {
       });
       resolve();
     })
+  }
+
+  @Action(CalcularActividadesResumenAction)
+  getActividadesResumen({ getState, setState }: StateContext<LogisticStateModel>, { payload }: CalcularActividadesResumenAction) {
+    return new Promise((resolve) => {
+      const previousState = getState();
+
+      const rutas = previousState.rutasMant.rutas;
+      const indicadores = previousState.actividadesFundamentalesMant.indicadores;
+      const otrasActividades = previousState.otrasActividadesMant.otrasActividades;
+      const costoxKm = previousState.actividadesMant.costoxKm;
+      
+      const calculoActividades = this.generalServicio.calcularResumenActividadesFundamentales(rutas, indicadores, otrasActividades, costoxKm);
+
+      setState({
+        ...previousState,
+        actividadesResumenMant: {
+          calculoActividadesRuta: calculoActividades
+        }
+      });
+      resolve();
+    })
+  }
+
+  private calcularIndicadoresActividadesFundamentales(actividades: Actividad[], kmPorEquipo: number) {
+    const indicadores = new Array<Actividad>();
+    const indicadorCombustible = this.generalServicio.getIndicadorCombustible(actividades);
+    const indicador = new Actividad();
+    indicador.id = Guid.create().toString();
+    indicador.descripcion = "Indicador de combustible";
+    indicador.monto = indicadorCombustible;
+    indicadores.push(indicador);
+
+    const otrosIndicadores = this.generalServicio.getOtrosIndicadorFundamentales(actividades, kmPorEquipo);
+    otrosIndicadores.forEach(item => indicadores.push(item));
+
+    return indicadores;
   }
 }

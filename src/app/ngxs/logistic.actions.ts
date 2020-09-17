@@ -6,14 +6,39 @@ export class AddCantidadCargaTransportarAction {
   constructor(public payload: number) { }
 }
 
+export class CalcularActividadesResumenAction {
+  static readonly type = '[RESUMEN] Calcular';
+  constructor(public payload: boolean) { }
+}
+
 export class AddRutasAction {
   static readonly type = '[RUTAS] Add Range';
   constructor(public payload: Ruta[]) { }
 }
 
+export class AddOtrasActividadesAction {
+  static readonly type = '[OTRAS ACTIVIDADES] Add Range';
+  constructor(public payload: Actividad[]) { }
+}
+
+export class AddActividadesFundamentalesAction {
+  static readonly type = '[ACTIVIDADES FUNDAMENTALES] Add Range';
+  constructor(public payload: Actividad[]) { }
+}
+
+export class UpdateActividadesFundamentalesAction {
+  static readonly type = '[ACTIVIDADES FUNDAMENTALES] Update';
+  constructor(public payload: Actividad) { }
+}
+
 export class UpdateRutaAction {
   static readonly type = '[RUTAS] Update';
   constructor(public payload: Ruta) { }
+}
+
+export class UpdateOtraActividadAction {
+  static readonly type = '[OTRAS ACTIVIDADES] Update';
+  constructor(public payload: Actividad) { }
 }
 
 export class AddRutaAction {

@@ -6,17 +6,20 @@
       </div>
       <div class="card-body">
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-md-5">
             <div class="form-group">
               <label for="exampleInputEmail1">Nombre de la Empresa</label>
               <input type="text" class="form-control" placeholder="Tipo de mercaderia" name="tipoMercaderia" [(ngModel)]="nombreEmpresa">
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-5">
               <div class="form-group">
                 <label>Cantidad de Contenedores</label>
                 <input type="number" class="form-control" placeholder="Cantidad de carga a transportar" name="cantidadTransportar" [(ngModel)]="cantidadContenedores" (keyup)="cantidadCargaTransportarChange()">
               </div>
+          </div>
+          <div class="col-md-5">
+            <button type="button" class="btn btn-success btn-outline-dark" (click)="calcular()">Calcular</button>
           </div>
         </div>
 

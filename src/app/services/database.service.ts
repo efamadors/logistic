@@ -22,16 +22,25 @@ export class DatabaseService {
   }
 
   saveActividadesFundamentales(actividades: Actividad[]) {
-    localStorage.setItem('actividades', JSON.stringify(actividades));
+    localStorage.setItem('actividadesFundamentales', JSON.stringify(actividades));
   }
 
   saveIndicadoresFundamentales(actividades: Actividad[]) {
     localStorage.setItem('indicadoresFundamentales', JSON.stringify(actividades));
   }
 
+  saveOtrasActividades(actividades: Actividad[]) {
+    localStorage.setItem('otrasActividades', JSON.stringify(actividades));
+  }
+
   getCantidadCargaTransportar() : number{
     const cantidadCargaTransportar = localStorage.getItem('cantidadCargaTransportar');
     return Number(cantidadCargaTransportar ? cantidadCargaTransportar : 0);
+  }
+
+  getOtrasActividades(): Actividad[] {
+    const string = localStorage.getItem('otrasActividades');
+    return JSON.parse(string);
   }
 
   getRutas(): Ruta[] {
@@ -53,7 +62,7 @@ export class DatabaseService {
   }
 
   getActividadesFundamentales(): Actividad[] {
-    const rutasString = localStorage.getItem('actividades');
+    const rutasString = localStorage.getItem('actividadesFundamentales');
     return JSON.parse(rutasString);
   }
 

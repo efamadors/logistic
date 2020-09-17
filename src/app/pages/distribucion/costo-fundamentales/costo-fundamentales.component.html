@@ -15,7 +15,7 @@
           </th>
         </thead>
         <tbody>
-          <tr *ngFor="let ruta of actividades">
+          <tr *ngFor="let ruta of (actividadesFundamentalesMant$ | async).actividadesFundamentales">
             <td>
               {{ruta.descripcion}}
             </td>
@@ -45,7 +45,7 @@
           </th>
         </thead>
         <tbody>
-          <tr *ngFor="let ruta of indicadores">
+          <tr *ngFor="let ruta of (actividadesFundamentalesMant$ | async).indicadores">
             <td>
               {{ruta.descripcion}}
             </td>

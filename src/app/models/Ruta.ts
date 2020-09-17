@@ -7,7 +7,8 @@ export class Ruta {
     public distancia: number;
     public cantidadViajes: number;
     public recorrido: number;
-
+    public costoxKm: number;
+    
     calcularRecorrido(){
         this.recorrido = this.distancia * this.cantidadViajes * 2;
     }

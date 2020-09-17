@@ -7,6 +7,7 @@ import { CubicajeGranel } from '../models/CubicajeGranel';
 import { Ruta } from '../models/Ruta';
 import { Actividad } from '../models/Actividades';
 import { Guid } from 'guid-typescript';
+import { ActividadResumen } from 'app/models/ActividadResumen';
 
 @Injectable({
   providedIn: 'root'
@@ -34,6 +35,62 @@ export class GeneralService {
     const precio = actividades.filter(item => item.monto > 0 && item.descripcion == "Precio de combustible").reduce((sum, current) => sum + current.monto, 0);
     const consumo = actividades.filter(item => item.monto > 0 && item.descripcion == "Consumo de combustible").reduce((sum, current) => sum + current.monto, 0);
     return precio / consumo;
+  }
+
+  getOtrosIndicadorFundamentales(actividades: Actividad[], kmPorEquipo: number) : Actividad[] {
+    let retorno = new Array<Actividad>();
+
+    actividades.forEach(item => {
+      if (item.descripcion != "Precio de combustible" && item.descripcion != "Consumo de combustible"){
+        const indicador = item.monto / kmPorEquipo;
+        const newActividad = new Actividad();
+        newActividad.id = Guid.create().toString();
+        newActividad.descripcion = item.descripcion;
+        newActividad.monto = indicador;
+        retorno.push(newActividad);
+      }
+    })
+    return retorno;
+  }
+
+  calcularResumenActividadesFundamentales(rutas: Ruta[], indicadores: Actividad[], otrasActividades: Actividad[], costoxKmGlobal: number) : Ruta[]{
+    let retorno = new Array<Ruta>();
+    debugger;
+
+    let actividadesCalculadas = new Array<ActividadResumen>();
+    rutas.forEach(ruta => {
+      const distanciaKm = ruta.distancia;
+      indicadores.forEach(actFund => {
+        const indicador = actFund.monto;
+        const itemResumen = new ActividadResumen();
+        itemResumen.ruta = ruta.destino;
+        itemResumen.descripcion = actFund.descripcion;
+        itemResumen.monto = distanciaKm * 2 * indicador;
+        actividadesCalculadas.push(itemResumen);
+      })
+
+      otrasActividades.filter(r=>r.monto > 0).forEach(otraAct => {
+        const itemResumen = new ActividadResumen();
+        itemResumen.ruta = ruta.destino;
+        itemResumen.descripcion = otraAct.descripcion;
+        itemResumen.monto = otraAct.monto;
+        actividadesCalculadas.push(itemResumen);
+      })
+    })
+
+    rutas.forEach(ruta => {
+      const totalCosto = actividadesCalculadas.filter(item => item.ruta == ruta.destino).reduce((sum, current) => sum + current.monto, 0);
+      const costoxKm = totalCosto / (ruta.distancia*2);
+      const totalCostoxKm = costoxKm + costoxKmGlobal; 
+
+      const itemResumen = new Ruta();
+      itemResumen.destino = ruta.destino;
+      itemResumen.distancia = ruta.distancia;
+      itemResumen.costoxKm = totalCostoxKm;
+      retorno.push(itemResumen);
+    })
+  
+    return retorno;
   }
 
   getTotalCostoApoyo(actividades: Actividad[]): number {
