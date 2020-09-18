@@ -241,8 +241,14 @@ export class GeneralService {
     const cantidadCajasxContenedorPeso = Math.floor(cubicajeGeneral.tipoVehiculoCargaTerrestre.peso / cubicajeGeneral.dimensionCaja.capacidad);
     const cantidadContenedoresNecesariosPeso = Math.ceil(cubicajeGeneral.tipoVehiculoCargaTerrestre.peso / cantidadCajasxContenedorPeso);
 
-    result.cantidadPorContenedor = Math.min(cantidadCajasxContenedorVolumen, cantidadCajasxContenedorPeso);
-    result.cantidadContenedoresNecesarios = Math.min(cantidadContenedoresNecesariosVolumen, cantidadContenedoresNecesariosPeso);
+    if (cantidadCajasxContenedorVolumen <= cantidadCajasxContenedorPeso){
+      result.cantidadPorContenedor = cantidadCajasxContenedorVolumen;
+      result.cantidadContenedoresNecesarios =cantidadContenedoresNecesariosVolumen;
+    }
+    if (cantidadCajasxContenedorVolumen > cantidadCajasxContenedorPeso){
+      result.cantidadPorContenedor = cantidadCajasxContenedorPeso;
+      result.cantidadContenedoresNecesarios = cantidadContenedoresNecesariosPeso;
+    }
     
     return result;
   }
