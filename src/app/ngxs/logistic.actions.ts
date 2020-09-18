@@ -26,6 +26,17 @@ export class AddActividadesFundamentalesAction {
   constructor(public payload: Actividad[]) { }
 }
 
+export class AddActividadFundamentalAction {
+  static readonly type = '[ACTIVIDADES FUNDAMENTALES] Add';
+  constructor(public payload: Actividad) { }
+}
+
+export class DeleteActividadFundamentalAction {
+  static readonly type = '[ACTIVIDADES FUNDAMENTALES] Delete';
+  constructor(public payload: Actividad) { }
+}
+
+
 export class UpdateActividadesFundamentalesAction {
   static readonly type = '[ACTIVIDADES FUNDAMENTALES] Update';
   constructor(public payload: Actividad) { }
@@ -58,6 +69,11 @@ export class AddActividadesApoyoAction {
 
 export class AddActividadApoyoAction {
   static readonly type = '[ACTIVIDADES APOYO] Add';
+  constructor(public payload: Actividad) { }
+}
+
+export class DeleteActividadApoyoAction {
+  static readonly type = '[ACTIVIDADES APOYO] Delete';
   constructor(public payload: Actividad) { }
 }
 

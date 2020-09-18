@@ -2,7 +2,7 @@ import { Action, Selector, State, StateContext } from "@ngxs/store";
 import { DatabaseService } from '../services/database.service';
 import { Guid } from 'guid-typescript';
 import { Ruta } from '../models/Ruta';
-import { AddActividadApoyoAction, AddActividadesApoyoAction, AddActividadesFundamentalesAction, AddCantidadCargaTransportarAction, AddOtrasActividadesAction, AddRutaAction, AddRutasAction, CalcularActividadesResumenAction, DeleteRutaAction, UpdateActividadApoyoAction, UpdateActividadesFundamentalesAction, UpdateOtraActividadAction, UpdateRutaAction } from './logistic.actions';
+import { AddActividadApoyoAction, AddActividadesApoyoAction, AddActividadesFundamentalesAction, AddActividadFundamentalAction, AddCantidadCargaTransportarAction, AddOtrasActividadesAction, AddRutaAction, AddRutasAction, CalcularActividadesResumenAction, DeleteActividadApoyoAction, DeleteActividadFundamentalAction, DeleteRutaAction, UpdateActividadApoyoAction, UpdateActividadesFundamentalesAction, UpdateOtraActividadAction, UpdateRutaAction } from './logistic.actions';
 import { Injectable } from '@angular/core';
 import { Actividad } from '../models/Actividades';
 import { GeneralService } from 'app/services/general.service';
@@ -169,6 +169,29 @@ export class LogisticState {
     })
   }
 
+  @Action(AddActividadFundamentalAction)
+  addActividadFundamental({ getState, setState }: StateContext<LogisticStateModel>, { payload }: AddActividadFundamentalAction) {
+    return new Promise((resolve) => {
+      const previousState = getState();
+      const actividades = [...previousState.actividadesFundamentalesMant.actividadesFundamentales];
+      payload.id = Guid.create().toString();
+      actividades.push(payload);
+
+      this.database.saveActividadesFundamentales(actividades);
+
+      const indicadores = this.calcularIndicadoresActividadesFundamentales(actividades, previousState.rutasMant.kmPorEquipo);
+
+      setState({
+        ...previousState,
+        actividadesFundamentalesMant: {
+          actividadesFundamentales: actividades,
+          indicadores: indicadores
+        }
+      });
+      resolve();
+    })
+  }
+
   @Action(UpdateRutaAction)
   updateRuta({ getState, setState }: StateContext<LogisticStateModel>, { payload }: UpdateRutaAction) {
     return new Promise((resolve) => {
@@ -250,6 +273,53 @@ export class LogisticState {
           rutas: rutasFilter,
           totalKm: totalKm,
           kmPorEquipo: kmPorEquipo
+        }
+      });
+      resolve();
+    })
+  }
+
+  @Action(DeleteActividadFundamentalAction)
+  deleteActividadFundamental({ getState, setState }: StateContext<LogisticStateModel>, { payload }: DeleteActividadFundamentalAction) {
+    return new Promise((resolve) => {
+      const previousState = getState();
+      const actividades = [...previousState.actividadesFundamentalesMant.actividadesFundamentales];
+      const actividadFilter = actividades.filter(r => r.id != payload.id);
+      this.database.saveActividadesFundamentales(actividadFilter);
+
+      const indicadores = this.calcularIndicadoresActividadesFundamentales(actividadFilter, previousState.rutasMant.kmPorEquipo);
+
+      setState({
+        ...previousState,
+        actividadesFundamentalesMant: {
+          actividadesFundamentales: actividadFilter,
+          indicadores: indicadores
+        }
+      });
+      resolve();
+    })
+  }
+
+  @Action(DeleteActividadApoyoAction)
+  deleteActividadApoyo({ getState, setState }: StateContext<LogisticStateModel>, { payload }: DeleteActividadApoyoAction) {
+    return new Promise((resolve) => {
+      const previousState = getState();
+      const actividades = [...previousState.actividadesMant.actividadesApoyo];
+      const actividadFilter = actividades.filter(r => r.id != payload.id);
+      this.database.saveActividadesApoyo(actividadFilter);
+
+      const totalCosteApoyo = this.generalServicio.getTotalCostoApoyo(actividadFilter);
+      const totalKm = previousState.rutasMant.totalKm;
+
+      let costoxKm;
+      if (totalKm > 0) costoxKm = totalCosteApoyo / totalKm;
+
+      setState({
+        ...previousState,
+        actividadesMant: {
+          actividadesApoyo: actividadFilter,
+          costoxKm: costoxKm,
+          totalCosteApoyo: totalCosteApoyo
         }
       });
       resolve();

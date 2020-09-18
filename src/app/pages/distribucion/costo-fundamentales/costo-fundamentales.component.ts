@@ -1,11 +1,14 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Select } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
+import { DeleteActividadFundamentalAction } from 'app/ngxs/logistic.actions';
 import { ActividadFundamentalResponse, LogisticState } from 'app/ngxs/logistic.state';
 import { Observable } from 'rxjs';
 import { Actividad } from '../../../models/Actividades';
 import { DatabaseService } from '../../../services/database.service';
 import { GeneralService } from '../../../services/general.service';
+import { CrearActividadComponent } from '../costo-actividades/crear-actividad/crear-actividad.component';
+import { CrearFundamentalComponent } from './crear-fundamental/crear-fundamental.component';
 import { EditarFundamentalComponent } from './editar-fundamental/editar-fundamental.component';
 
 @Component({
@@ -23,7 +26,7 @@ export class CostoFundamentalesComponent implements OnInit {
   totalCosteApoyo: number;
   indicadores: Actividad[];
 
-  constructor(private generalServicio: GeneralService, private database: DatabaseService, private modalService: NgbModal) { }
+  constructor(private store: Store, private database: DatabaseService, private modalService: NgbModal) { }
 
   ngOnInit(): void {
     this.indicadores = new Array<Actividad>();
@@ -41,13 +44,12 @@ export class CostoFundamentalesComponent implements OnInit {
   }
 
   agregar() {
-    // const modalRef = this.modalService.open(CrearFundamentalComponent);
-    // modalRef.result.then((res)=>{
-    //   if (res){
-    //     this.actividades.push(res);
-    //     this.calcularIndicadores();
-    //   }
-    // })
+    const modalRef = this.modalService.open(CrearFundamentalComponent);
+    modalRef.result.then((res)=>{
+      if (res){
+        this.calcularIndicadores();
+      }
+    })
   }
 
   calcularIndicadores(){
@@ -66,10 +68,7 @@ export class CostoFundamentalesComponent implements OnInit {
     // this.indicadores.push(indicador);
   }
 
-  otrosIndicadores(){
-    // const indicadorOtros = this.generalServicio.getIndicadoresOtros(this.actividades, this.costoKm);
-    // indicadorOtros.forEach(item => {
-    //   this.indicadores.push(item);
-    // })
+  delete(actividad){
+    this.store.dispatch(new DeleteActividadFundamentalAction(actividad));
   }
 }

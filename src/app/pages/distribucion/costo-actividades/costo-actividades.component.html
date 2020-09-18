@@ -24,7 +24,7 @@
                         </td>
                         <td>
                             <button (click)="edit(actividad)" class="btn btn-success btn-round">Editar</button>
-                            <button class="btn btn-danger btn-round">Eliminar</button>
+                            <button (click)="delete(actividad)" class="btn btn-danger btn-round">Eliminar</button>
                         </td>
                       </tr>
                     </tbody>
@@ -47,9 +47,4 @@
               </div>
             </div>
     
-            <div class="row">
-              <div class="update ml-auto mr-auto">
-                <button (click)="calcular()" type="submit" class="btn btn-primary btn-round">Calcular</button>
-              </div>
-            </div>
-          
+           

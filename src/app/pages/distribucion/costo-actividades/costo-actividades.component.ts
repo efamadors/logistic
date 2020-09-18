@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Select, Store } from '@ngxs/store';
+import { DeleteActividadApoyoAction } from 'app/ngxs/logistic.actions';
 import { ActividadApoyoResponse, LogisticState } from 'app/ngxs/logistic.state';
 import { DatabaseService } from 'app/services/database.service';
 import { GeneralService } from 'app/services/general.service';
@@ -54,7 +55,7 @@ export class CostoActividadesComponent implements OnInit {
    
   }
 
-  calcular() {
-
+  delete(actividad: Actividad) {
+    this.store.dispatch(new DeleteActividadApoyoAction(actividad));
   }
 }
