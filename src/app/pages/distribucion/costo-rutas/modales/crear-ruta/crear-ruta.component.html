@@ -1,6 +1,6 @@
 <div class="modal-header">
   <h4 class="modal-title">Crear Ruta</h4>
-  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss(null)">
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
@@ -9,7 +9,7 @@
       <div class="col-md-12">
         <div class="form-group">
           <label for="exampleInputEmail1">Origen</label>
-          <input type="text" class="form-control" placeholder="Tipo de mercaderia" name="tipoMercaderia" [(ngModel)]="ruta.origen">
+          <input type="text" class="form-control" placeholder="Origen de la ruta" name="origen" [(ngModel)]="ruta.origen">
         </div>
       </div>
   </div>
@@ -17,7 +17,7 @@
       <div class="col-md-12">
         <div class="form-group">
           <label for="exampleInputEmail1">Destino</label>
-          <input type="text" class="form-control" placeholder="Tipo de mercaderia" name="tipoMercaderia" [(ngModel)]="ruta.destino">
+          <input type="text" class="form-control" placeholder="Destino de la ruta" name="destino" [(ngModel)]="ruta.destino">
         </div>
       </div>
   </div>
@@ -25,7 +25,7 @@
       <div class="col-md-12">
         <div class="form-group">
           <label for="exampleInputEmail1">Distancia en Km</label>
-          <input type="text" class="form-control" placeholder="Tipo de mercaderia" name="tipoMercaderia" [(ngModel)]="ruta.distancia" (keyup)="ruta.calcularRecorrido()"> 
+          <input type="text" class="form-control" placeholder="Distancia en km" name="distancia" [(ngModel)]="ruta.distancia" (keyup)="ruta.calcularRecorrido()"> 
         </div>
       </div>
   </div>
@@ -33,7 +33,7 @@
       <div class="col-md-12">
         <div class="form-group">
           <label for="exampleInputEmail1">Cantidad de Viajes</label>
-          <input type="text" class="form-control" placeholder="Tipo de mercaderia" name="tipoMercaderia" [(ngModel)]="ruta.cantidadViajes" (keyup)="ruta.calcularRecorrido()">
+          <input type="text" class="form-control" placeholder="Cantidad de Viajes" name="cantidadViajes" [(ngModel)]="ruta.cantidadViajes" (keyup)="ruta.calcularRecorrido()">
         </div>
       </div>
   </div>
@@ -41,7 +41,7 @@
       <div class="col-md-12">
         <div class="form-group">
           <label for="exampleInputEmail1">Recorrido</label>
-          <input type="text" class="form-control" placeholder="Tipo de mercaderia" name="tipoMercaderia" [(ngModel)]="ruta.recorrido" disabled>
+          <input type="text" class="form-control" placeholder="Recorrido" name="recorrido" [(ngModel)]="ruta.recorrido" disabled>
         </div>
       </div>
   </div>

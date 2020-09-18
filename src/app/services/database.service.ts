@@ -19,6 +19,7 @@ export class DatabaseService {
   }
 
   saveRutas(rutas: Ruta[]) {
+    localStorage.removeItem('rutas');
     localStorage.setItem('rutas', JSON.stringify(rutas));
   }
 
@@ -57,6 +58,7 @@ export class DatabaseService {
     const rutasString = localStorage.getItem('rutas');
     return rutasString ? JSON.parse(rutasString).map((item)=>{
       const ruta = new Ruta();
+      ruta.id = item.id;
       ruta.origen = item.origen;
       ruta.destino = item.destino;
       ruta.distancia = item.distancia;
