@@ -55,7 +55,6 @@ export class GeneralService {
 
   calcularResumenActividadesFundamentales(rutas: Ruta[], indicadores: Actividad[], otrasActividades: Actividad[], costoxKmGlobal: number) : Ruta[]{
     let retorno = new Array<Ruta>();
-    debugger;
 
     let actividadesCalculadas = new Array<ActividadResumen>();
     rutas.forEach(ruta => {

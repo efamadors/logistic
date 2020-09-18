@@ -74,6 +74,9 @@ export class LogisticState {
   @Selector()
   static getOtrasActividades(state: LogisticStateModel) { return state.otrasActividadesMant; }
 
+  @Selector()
+  static getActividadesResumen(state: LogisticStateModel) { return state.actividadesResumenMant; }
+
   @Action(AddCantidadCargaTransportarAction)
   addCantidadCargaTransportar({ getState, setState }: StateContext<LogisticStateModel>, { payload }: AddCantidadCargaTransportarAction) {
     return new Promise((resolve) => {

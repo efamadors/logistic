@@ -17,6 +17,8 @@ import { NgxsModule } from '@ngxs/store';
 import { environment } from 'environments/environment';
 import { LogisticState } from './ngxs/logistic.state';
 
+
+
 @NgModule({
   declarations: [
     AppComponent,

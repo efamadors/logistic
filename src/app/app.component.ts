@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { AddActividadApoyoAction, AddActividadesApoyoAction, AddActividadesFundamentalesAction, AddCantidadCargaTransportarAction, AddOtrasActividadesAction, AddRutasAction } from './ngxs/logistic.actions';
+import { AddActividadApoyoAction, AddActividadesApoyoAction, AddActividadesFundamentalesAction, AddCantidadCargaTransportarAction, AddOtrasActividadesAction, AddRutasAction, CalcularActividadesResumenAction } from './ngxs/logistic.actions';
 import { DatabaseService } from './services/database.service';
 import { GeneralService } from './services/general.service';
 
@@ -18,6 +18,8 @@ export class AppComponent{
     this.getActividadesApoyo();
     this.getActividadesFundamentales();
     this.getOtrasActividades();
+
+    this.store.dispatch(new CalcularActividadesResumenAction(true));
   }
 
   private getCantidadCargaTransportar() {

@@ -29,7 +29,7 @@ import { EditarFundamentalComponent } from '../../pages/distribucion/costo-funda
 import { CrearFundamentalComponent } from '../../pages/distribucion/costo-fundamentales/crear-fundamental/crear-fundamental.component';
 import { OtrosCostosComponent } from '../../pages/distribucion/otros-costos/otros-costos.component';
 import { EditarOtroCostoComponent } from '../../pages/distribucion/otros-costos/editar-otro-costo/editar-otro-costo.component';
-
+import { ChartsModule } from 'ng2-charts';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
@@ -37,7 +37,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     CommonModule,
     RouterModule.forChild(AdminLayoutRoutes),
     FormsModule,
-    NgbModule
+    NgbModule,
+    ChartsModule
   ],
   declarations: [
     DashboardComponent,
