@@ -6,7 +6,6 @@ import { AddActividadApoyoAction, AddActividadesApoyoAction, AddActividadesFunda
 import { Injectable } from '@angular/core';
 import { Actividad } from '../models/Actividades';
 import { GeneralService } from 'app/services/general.service';
-import { ActividadResumen } from 'app/models/ActividadResumen';
 
 export class ActividadesResumenResponse {
   calculoActividadesRuta: Ruta[];
@@ -222,7 +221,7 @@ export class LogisticState {
       actividades[actividadIndex] = payload;
       this.database.saveActividadesFundamentales(actividades);
 
-      const indicadores = this.calcularIndicadoresActividadesFundamentales(actividades, previousState.rutasMant.totalKm);
+      const indicadores = this.calcularIndicadoresActividadesFundamentales(actividades, previousState.rutasMant.kmPorEquipo);
 
       setState({
         ...previousState,

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Empresa } from 'app/models/Empresa';
 import { Actividad } from '../models/Actividades';
 import { Ruta } from '../models/Ruta';
 
@@ -8,6 +9,10 @@ import { Ruta } from '../models/Ruta';
 export class DatabaseService {
 
   constructor() { }
+
+  setEmpresa(empresa: Empresa){
+    localStorage.setItem('empresa', JSON.stringify(empresa));
+  }
 
   saveCantidadCargaTransportar(cantidadCargaTransportar: number){
     localStorage.setItem('cantidadCargaTransportar', cantidadCargaTransportar.toString());
@@ -31,6 +36,11 @@ export class DatabaseService {
 
   saveOtrasActividades(actividades: Actividad[]) {
     localStorage.setItem('otrasActividades', JSON.stringify(actividades));
+  }
+
+  getEmpresa(){
+    const string = localStorage.getItem('empresa');
+    return JSON.parse(string);
   }
 
   getCantidadCargaTransportar() : number{
