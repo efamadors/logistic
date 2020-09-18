@@ -4,7 +4,36 @@
       <div class="card-header ">
         <h5 class="card-title">Grafico Comportamiento Costo x Km</h5>
       </div>
+      <div>
+        <table class="table">
+          <thead class=" text-primary">
+            <th>
+              Ruta
+            </th>
+            <th>
+              Distancia
+            </th>
+            <th>
+                Costo x Km
+            </th>
+          </thead>
+          <tbody>
+            <tr *ngFor="let ruta of (actividadesResumenMant$ | async).calculoActividadesRuta">
+              <td>
+                {{ruta.destino}}
+              </td>
+              <td class="text-right">
+                {{ruta.distancia}}
+              </td>
+              <td class="text-right">
+                {{ruta.costoxKm}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <div style="display: block;">
+       
         <canvas baseChart
         [datasets]="scatterChartData"
         [options]="scatterChartOptions"
