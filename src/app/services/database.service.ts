@@ -14,6 +14,10 @@ export class DatabaseService {
     localStorage.setItem('empresa', JSON.stringify(empresa));
   }
 
+  saveEmpresa(empresa: Empresa){
+    localStorage.setItem('empresa',JSON.stringify(empresa));
+  }
+
   saveCantidadCargaTransportar(cantidadCargaTransportar: number){
     localStorage.setItem('cantidadCargaTransportar', cantidadCargaTransportar.toString());
   }

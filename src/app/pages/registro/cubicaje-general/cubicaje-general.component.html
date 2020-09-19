@@ -2,7 +2,7 @@
     <div class="col-md-3">
       <div class="form-group">
         <label for="exampleInputEmail1">Tipo Mercancia Transportar</label>
-        <input type="text" class="form-control" placeholder="Tipo de mercaderia" name="tipoMercaderia" [(ngModel)]="cubicajeGeneral.tipoMercancia">
+        <input type="text" class="form-control" placeholder="Tipo de mercaderia" name="tipoMercaderia" [(ngModel)]="cubicajeGeneral.tipoMercancia" (keyup)="tipoMercaderiaChange()">
       </div>
     </div>
   </div>

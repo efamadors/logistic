@@ -10,7 +10,7 @@
               <div class="col-md-5">
                 <div class="form-group">
                   <label for="inputGroupSelect02">Tipo Cubicaje</label>
-                  <select class="form-control" id="inputGroupSelect02" name="tipoCubicaje" [(ngModel)]="tipoCubicajeSeleccionado">
+                  <select class="form-control" id="inputGroupSelect02" name="tipoCubicaje" [(ngModel)]="tipoCubicajeSeleccionado" (change)="tipoCubicajeSeleccionadoEvento()">
                     <option selected>Seleccione un tipo...</option>
                     <option value="CubicajeGeneral">Cubicaje General</option>
                     <option value="LiquidoRecipiente">Liquido en Recipientes</option>
@@ -22,7 +22,7 @@
               <div class="col-md-7">
                 <div class="form-group">
                   <label>Nombre de la Empresa</label>
-                  <input type="text" class="form-control" placeholder="Nombre de la Empresa" value="">
+                  <input type="text" class="form-control" placeholder="Nombre de la Empresa" name="nombreEmpresa" [(ngModel)]="nombreEmpresa" (change)="nombreEmpresaChange()">
                 </div>
               </div>
             </div>

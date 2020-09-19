@@ -4,44 +4,112 @@
       <div class="card-header ">
         <h5 class="card-title">Grafico Comportamiento Costo x Km</h5>
       </div>
-      <div>
-        <table class="table">
-          <thead class=" text-primary">
-            <th>
-              Ruta
-            </th>
-            <th>
-              Distancia
-            </th>
-            <th>
-                Costo x Km
-            </th>
-          </thead>
-          <tbody>
-            <tr *ngFor="let ruta of (actividadesResumenMant$ | async).calculoActividadesRuta">
-              <td>
-                {{ruta.destino}}
-              </td>
-              <td class="text-right">
-                {{ruta.distancia}}
-              </td>
-              <td class="text-right">
-                {{ruta.costoxKm}}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div style="display: block;">
-       
-        <canvas baseChart
-        [datasets]="scatterChartData"
-        [options]="scatterChartOptions"
-        [labels]="scatterChartLabels"
-        [chartType]="scatterChartType">
-      </canvas>
-      </div>
-      <div class="card-footer ">
+      
+      <div class="card-footer">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Nombre de la Empresa</label>
+              <input type="text" class="form-control" name="nombreEmpresa" disabled  [(ngModel)]="empresa.nombre">
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Tipo Mercaderia a Transportar</label>
+              <input type="text" class="form-control" name="tipoMercancia" disabled  [(ngModel)]="empresa.tipoMercancia">
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Tipo Vehiculo Carga</label>
+              <input type="text" class="form-control" name="tipoVehiculo" disabled  [(ngModel)]="empresa.tipoVehiculo">
+            </div>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="empresa.cantidadCisternas > 0">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Cantidad de Cisternas</label>
+              <input type="text" class="form-control" name="cantidadCisternas" disabled  [(ngModel)]="empresa.cantidadCisternas">
+            </div>
+          </div>
+          <div class="col-md-6" *ngIf="empresa.cantidadCisternas == 0">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Cantidad Cajas x Contenedor</label>
+              <input type="text" class="form-control" name="cantidadCajasContenedor" disabled  [(ngModel)]="empresa.cantidadCajasContenedor">
+            </div>
+          </div>
+          <div class="col-md-6" *ngIf="empresa.cantidadCisternas == 0">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Cantidad Contenedores Necesarios</label>
+              <input type="text" class="form-control" name="tipoMercancia" disabled  [(ngModel)]="empresa.cantidadContenedoresNecesarios">
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Total de Km</label>
+              <input type="text" class="form-control" name="cantidadCisternas" disabled  [(ngModel)]="totalKm">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Km Por Equipo</label>
+              <input type="text" class="form-control" name="cantidadCajasContenedor" disabled  [(ngModel)]="kmPorEquipo">
+            </div>
+          </div>
+        </div>
+
+
+        <div>
+          <table class="table">
+            <thead class=" text-primary">
+              <th>
+                Ruta
+              </th>
+              <th class="text-right">
+                Distancia
+              </th>
+              <th class="text-right">
+                Costo x Km Act Fundamentales
+              </th>
+              <th class="text-right">
+                Costo x Km Act Apoyo
+              </th>
+              <th class="text-right">
+                Total Costo x Km
+              </th>
+            </thead>
+            <tbody>
+              <tr *ngFor="let ruta of (actividadesResumenMant$ | async).calculoActividadesRuta">
+                <td>
+                  {{ruta.destino}}
+                </td>
+                <td class="text-right">
+                  {{ruta.distancia}}
+                </td>
+                <td class="text-right">
+                  {{ruta.costoxKmActFundamental}}
+                </td>
+                <td class="text-right">
+                  {{ruta.costoxKmActApoyo}}
+                </td>
+                <td class="text-right">
+                  {{ruta.costoxKmTotal}}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="display: block;">
+
+          <canvas baseChart [datasets]="scatterChartData" [options]="scatterChartOptions" [labels]="scatterChartLabels"
+            [chartType]="scatterChartType">
+          </canvas>
+        </div>
         <hr>
         <div class="stats">
           <i class="fa fa-history"></i> Updated 3 minutes ago

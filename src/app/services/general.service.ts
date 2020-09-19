@@ -79,13 +79,15 @@ export class GeneralService {
 
     rutas.forEach(ruta => {
       const totalCosto = actividadesCalculadas.filter(item => item.ruta == ruta.destino).reduce((sum, current) => sum + current.monto, 0);
-      const costoxKm = totalCosto / (ruta.distancia*2);
-      const totalCostoxKm = costoxKm + costoxKmGlobal; 
+      const costoxKmFuncamental = totalCosto / (ruta.distancia*2);
+      const totalCostoxKm = costoxKmFuncamental + costoxKmGlobal; 
 
       const itemResumen = new Ruta();
       itemResumen.destino = ruta.destino;
       itemResumen.distancia = ruta.distancia;
-      itemResumen.costoxKm = totalCostoxKm;
+      itemResumen.costoxKmActFundamental = costoxKmFuncamental;
+      itemResumen.costoxKmActApoyo = costoxKmGlobal;
+      itemResumen.costoxKmTotal = totalCostoxKm;
       retorno.push(itemResumen);
     })
   

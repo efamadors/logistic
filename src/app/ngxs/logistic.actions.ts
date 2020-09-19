@@ -1,5 +1,11 @@
+import { Empresa } from 'app/models/Empresa';
 import { Actividad } from '../models/Actividades';
 import { Ruta } from '../models/Ruta';
+
+export class AddOrUpdateEmpresaAction {
+  static readonly type = '[EMPRESA] AddOrUpdate';
+  constructor(public payload: Empresa) { }
+}
 
 export class AddCantidadCargaTransportarAction {
   static readonly type = '[CANTIDAD CARGA TRANSPORTAR] Add';

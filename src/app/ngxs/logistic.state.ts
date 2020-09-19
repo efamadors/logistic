@@ -2,10 +2,15 @@ import { Action, Selector, State, StateContext } from "@ngxs/store";
 import { DatabaseService } from '../services/database.service';
 import { Guid } from 'guid-typescript';
 import { Ruta } from '../models/Ruta';
-import { AddActividadApoyoAction, AddActividadesApoyoAction, AddActividadesFundamentalesAction, AddActividadFundamentalAction, AddCantidadCargaTransportarAction, AddOtrasActividadesAction, AddRutaAction, AddRutasAction, CalcularActividadesResumenAction, DeleteActividadApoyoAction, DeleteActividadFundamentalAction, DeleteRutaAction, UpdateActividadApoyoAction, UpdateActividadesFundamentalesAction, UpdateOtraActividadAction, UpdateRutaAction } from './logistic.actions';
+import { AddActividadApoyoAction, AddActividadesApoyoAction, AddActividadesFundamentalesAction, AddActividadFundamentalAction, AddCantidadCargaTransportarAction, AddOrUpdateEmpresaAction, AddOtrasActividadesAction, AddRutaAction, AddRutasAction, CalcularActividadesResumenAction, DeleteActividadApoyoAction, DeleteActividadFundamentalAction, DeleteRutaAction, UpdateActividadApoyoAction, UpdateActividadesFundamentalesAction, UpdateOtraActividadAction, UpdateRutaAction } from './logistic.actions';
 import { Injectable } from '@angular/core';
 import { Actividad } from '../models/Actividades';
 import { GeneralService } from 'app/services/general.service';
+import { Empresa } from 'app/models/Empresa';
+
+export class EmpresaResponse{
+  empresa: Empresa;
+}
 
 export class ActividadesResumenResponse {
   calculoActividadesRuta: Ruta[];
@@ -34,6 +39,7 @@ export class ActividadFundamentalResponse {
 
 export class LogisticStateModel {
   cantidadCargaTransportar: number;
+  empresaMant: EmpresaResponse;
   rutasMant: RutasResponse;
   actividadesMant: ActividadApoyoResponse;
   actividadesFundamentalesMant: ActividadFundamentalResponse;
@@ -45,6 +51,7 @@ export class LogisticStateModel {
   name: 'logistic',
   defaults: {
     cantidadCargaTransportar: 0,
+    empresaMant: new EmpresaResponse(),
     rutasMant: new RutasResponse(),
     actividadesMant: new ActividadApoyoResponse(),
     actividadesFundamentalesMant: new ActividadFundamentalResponse(),
@@ -57,6 +64,9 @@ export class LogisticState {
 
   constructor(private database: DatabaseService, private generalServicio: GeneralService) {
   }
+
+  @Selector()
+  static getEmpresa(state: LogisticStateModel) {return state.empresaMant;}
 
   @Selector()
   static getCantidadCargaTransportar(state: LogisticStateModel) { return state.cantidadCargaTransportar; }
@@ -75,6 +85,27 @@ export class LogisticState {
 
   @Selector()
   static getActividadesResumen(state: LogisticStateModel) { return state.actividadesResumenMant; }
+
+  @Action(AddOrUpdateEmpresaAction)
+  addOrUpdateEmpresa({ getState, setState }: StateContext<LogisticStateModel>, { payload }: AddOrUpdateEmpresaAction) {
+    return new Promise((resolve) => {
+      const previousState = getState();
+      const empresaOriginal = previousState.empresaMant.empresa;
+      const empresa = {
+        ...empresaOriginal,
+        ...payload
+      }
+      this.database.saveEmpresa(empresa);
+
+      setState({
+        ...previousState,
+        empresaMant: {
+          empresa: empresa
+        }
+      });
+      resolve();
+    })
+  }
 
   @Action(AddCantidadCargaTransportarAction)
   addCantidadCargaTransportar({ getState, setState }: StateContext<LogisticStateModel>, { payload }: AddCantidadCargaTransportarAction) {
@@ -408,7 +439,7 @@ export class LogisticState {
   }
 
   @Action(CalcularActividadesResumenAction)
-  getActividadesResumen({ getState, setState }: StateContext<LogisticStateModel>, { payload }: CalcularActividadesResumenAction) {
+  getActividadesResumen({ getState, setState }: StateContext<LogisticStateModel>, { }: CalcularActividadesResumenAction) {
     return new Promise((resolve) => {
       const previousState = getState();
 
